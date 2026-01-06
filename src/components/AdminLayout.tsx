@@ -36,7 +36,6 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-4 z-50">
         <div className="flex items-center gap-2">
           <Shield className="h-6 w-6 text-primary" />

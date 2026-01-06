@@ -217,7 +217,7 @@ export default function Reports() {
             variant="outline"
             className="gap-2"
           >
-            📊 Rider Stats
+            Rider Stats
           </Button>
         </div>
 
