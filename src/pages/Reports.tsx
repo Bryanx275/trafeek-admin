@@ -170,10 +170,8 @@ export default function Reports() {
         </Button>
       </div>
 
-      {/* Filters */}
       <Card className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Search */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
@@ -184,14 +182,12 @@ export default function Reports() {
             />
           </div>
 
-          {/* Country/Location */}
           <Input
-            placeholder="Filter by country/location..."
+            placeholder="Filter by rider email..."
             value={countrySearch}
             onChange={(e) => setCountrySearch(e.target.value)}
           />
 
-          {/* Type Filter */}
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
@@ -205,7 +201,6 @@ export default function Reports() {
             <option value="checkpoint">Police Checkpoint</option>
           </select>
 
-          {/* Engagement Filter */}
           <select
             value={engagementFilter}
             onChange={(e) => setEngagementFilter(e.target.value)}
@@ -216,9 +211,16 @@ export default function Reports() {
             <option value="most-upvoted">Most Upvoted</option>
             <option value="most-commented">Most Commented</option>
           </select>
+
+          <Button
+            onClick={() => (window.location.href = "/rider-performance")}
+            variant="outline"
+            className="gap-2"
+          >
+            📊 Rider Stats
+          </Button>
         </div>
 
-        {/* Active Filters Display */}
         {(countrySearch || engagementFilter !== "all") && (
           <div className="flex items-center gap-2 mt-3 pt-3 border-t">
             <span className="text-sm text-muted-foreground">

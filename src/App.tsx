@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Reports from "./pages/Reports";
 import AdminLayout from "./components/AdminLayout";
+import RiderPerformance from "./pages/RiderPerformance";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/rider-performance" element={<RiderPerformance />} />
+
             <Route
               path="/reports"
               element={

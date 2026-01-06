@@ -1,18 +1,22 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "./ui/button";
-import { 
-  LayoutDashboard, 
-  Users, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
   LogOut,
   Shield,
   Menu,
-  X
+  X,
 } from "lucide-react";
 import { useState } from "react";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { admin, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,6 +31,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/users", icon: Users, label: "Users" },
     { to: "/reports", icon: FileText, label: "Reports" },
+    { to: "/rider-performance", icon: FileText, label: "Rider Performance" },
   ];
 
   return (
