@@ -4,6 +4,7 @@ import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import { Download, Calendar, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 
 export default function RiderPerformance() {
+  const navigate = useNavigate();
   const [emailFilter, setEmailFilter] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -186,7 +188,15 @@ export default function RiderPerformance() {
               </TableRow>
             ) : (
               riders.map((rider: any, index: number) => (
-                <TableRow key={rider.email}>
+                <TableRow
+                  key={rider.email}
+                  className="cursor-pointer hover:bg-slate-50 transition-colors"
+                  onClick={() =>
+                    navigate(
+                      `/reports?email=${encodeURIComponent(rider.email)}`
+                    )
+                  }
+                >
                   <TableCell className="font-medium">#{index + 1}</TableCell>
                   <TableCell className="font-mono text-sm">
                     {rider.email}

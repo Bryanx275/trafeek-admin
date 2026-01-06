@@ -17,6 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Trash2, Download, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { useSearchParams } from "react-router-dom";
+import { X } from "lucide-react";
 
 interface Report {
   _id: string;
@@ -54,12 +56,21 @@ const reportTypes = {
 };
 
 export default function Reports() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const emailFromUrl = searchParams.get("email");
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [engagementFilter, setEngagementFilter] = useState("all");
-  const [countrySearch, setCountrySearch] = useState("");
+  const [countrySearch, setCountrySearch] = useState(emailFromUrl || "");
+
   const queryClient = useQueryClient();
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+
+  const clearEmailFilter = () => {
+    setCountrySearch("");
+    setSearchParams({}); // Clear URL params
+  };
+
   const { data: reportsData, isLoading } = useQuery({
     queryKey: ["admin-reports", typeFilter],
     queryFn: async () => {
@@ -169,7 +180,32 @@ export default function Reports() {
           Export CSV
         </Button>
       </div>
-
+      {emailFromUrl && (
+        <Card className="p-4 bg-blue-50 border-blue-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                <Search className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="font-medium text-blue-900">
+                  Viewing reports by rider
+                </p>
+                <p className="text-sm text-blue-700">{emailFromUrl}</p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearEmailFilter}
+              className="gap-2 text-blue-700 hover:text-blue-900"
+            >
+              <X className="h-4 w-4" />
+              Clear Filter
+            </Button>
+          </div>
+        </Card>
+      )}
       <Card className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="relative">
