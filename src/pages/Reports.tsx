@@ -140,14 +140,14 @@ export default function Reports() {
       (report.userId?.email &&
         report.userId.email.toLowerCase().includes(search.toLowerCase()));
 
-    const matchesCountry =
+    const matchesEmail =
       !countrySearch ||
-      (report.locationName &&
-        report.locationName
+      (report.userId?.email &&
+        report.userId.email
           .toLowerCase()
           .includes(countrySearch.toLowerCase()));
 
-    return matchesSearch && matchesCountry;
+    return matchesSearch && matchesEmail;
   });
 
   if (engagementFilter === "high-engagement") {
