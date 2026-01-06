@@ -193,7 +193,7 @@ export default function RiderPerformance() {
                   className="cursor-pointer hover:bg-slate-50 transition-colors"
                   onClick={() =>
                     navigate(
-                      `/reports?email=${encodeURIComponent(rider.email)}`
+                      `/rider-reports?email=${encodeURIComponent(rider.email)}`
                     )
                   }
                 >

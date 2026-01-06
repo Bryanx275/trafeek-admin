@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -14,11 +14,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, Trash2, Download, AlertTriangle, User } from "lucide-react";
+import { Search, Trash2, Download, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
-import { useSearchParams } from "react-router-dom";
-import { X } from "lucide-react";
 
 interface Report {
   _id: string;
@@ -56,46 +54,12 @@ const reportTypes = {
 };
 
 export default function Reports() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const emailFromUrl = searchParams.get("email");
-
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [engagementFilter, setEngagementFilter] = useState("all");
-  const [selectedRider, setSelectedRider] = useState(emailFromUrl || "all");
-
+  const [locationSearch, setLocationSearch] = useState("");
   const queryClient = useQueryClient();
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
-
-  const { data: ridersData } = useQuery({
-    queryKey: ["rider-performance"],
-    queryFn: async () => {
-      const res = await api.get("/admin/rider-performance");
-      return res.data;
-    },
-  });
-
-  const riders = ridersData?.riders || [];
-
-  useEffect(() => {
-    if (emailFromUrl) {
-      setSelectedRider(emailFromUrl);
-    }
-  }, [emailFromUrl]);
-
-  const handleRiderChange = (email: string) => {
-    setSelectedRider(email);
-    if (email === "all") {
-      setSearchParams({});
-    } else {
-      setSearchParams({ email });
-    }
-  };
-
-  const clearEmailFilter = () => {
-    setSelectedRider("all");
-    setSearchParams({});
-  };
 
   const { data: reportsData, isLoading } = useQuery({
     queryKey: ["admin-reports", typeFilter],
@@ -166,14 +130,14 @@ export default function Reports() {
       (report.userId?.email &&
         report.userId.email.toLowerCase().includes(search.toLowerCase()));
 
-    const matchesEmail =
-      selectedRider === "all" ||
-      (report.userId?.email &&
-        report.userId.email
+    const matchesLocation =
+      !locationSearch ||
+      (report.locationName &&
+        report.locationName
           .toLowerCase()
-          .includes(selectedRider.toLowerCase()));
+          .includes(locationSearch.toLowerCase()));
 
-    return matchesSearch && matchesEmail;
+    return matchesSearch && matchesLocation;
   });
 
   if (engagementFilter === "high-engagement") {
@@ -207,37 +171,9 @@ export default function Reports() {
         </Button>
       </div>
 
-      {/* Rider Filter Banner */}
-      {selectedRider !== "all" && (
-        <Card className="p-4 bg-blue-50 border-blue-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                <User className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="font-medium text-blue-900">
-                  Viewing reports by rider
-                </p>
-                <p className="text-sm text-blue-700">{selectedRider}</p>
-              </div>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearEmailFilter}
-              className="gap-2 text-blue-700 hover:text-blue-900"
-            >
-              <X className="h-4 w-4" />
-              Clear Filter
-            </Button>
-          </div>
-        </Card>
-      )}
-
       {/* Filters */}
       <Card className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -249,19 +185,12 @@ export default function Reports() {
             />
           </div>
 
-          {/* Rider Selector */}
-          <select
-            value={selectedRider}
-            onChange={(e) => handleRiderChange(e.target.value)}
-            className="px-4 py-2 border rounded-md bg-background"
-          >
-            <option value="all">All Riders ({reports.length})</option>
-            {riders.map((rider: any) => (
-              <option key={rider.email} value={rider.email}>
-                {rider.email} ({rider.totalReports})
-              </option>
-            ))}
-          </select>
+          {/* Location Filter */}
+          <Input
+            placeholder="Filter by location..."
+            value={locationSearch}
+            onChange={(e) => setLocationSearch(e.target.value)}
+          />
 
           {/* Type Filter */}
           <select
@@ -288,34 +217,38 @@ export default function Reports() {
             <option value="most-upvoted">Most Upvoted</option>
             <option value="most-commented">Most Commented</option>
           </select>
-
-          {/* Rider Stats Button */}
-          <Button
-            onClick={() => (window.location.href = "/rider-performance")}
-            variant="outline"
-            className="gap-2"
-          >
-            📊 Rider Stats
-          </Button>
         </div>
 
         {/* Active Filters */}
-        {engagementFilter !== "all" && (
+        {(locationSearch || engagementFilter !== "all") && (
           <div className="flex items-center gap-2 mt-3 pt-3 border-t">
             <span className="text-sm text-muted-foreground">
               Active filters:
             </span>
-            <Badge variant="secondary" className="gap-1">
-              {engagementFilter === "high-engagement" && "High Engagement"}
-              {engagementFilter === "most-upvoted" && "Most Upvoted"}
-              {engagementFilter === "most-commented" && "Most Commented"}
-              <button
-                onClick={() => setEngagementFilter("all")}
-                className="ml-1 hover:text-destructive"
-              >
-                ×
-              </button>
-            </Badge>
+            {locationSearch && (
+              <Badge variant="secondary" className="gap-1">
+                Location: {locationSearch}
+                <button
+                  onClick={() => setLocationSearch("")}
+                  className="ml-1 hover:text-destructive"
+                >
+                  ×
+                </button>
+              </Badge>
+            )}
+            {engagementFilter !== "all" && (
+              <Badge variant="secondary" className="gap-1">
+                {engagementFilter === "high-engagement" && "High Engagement"}
+                {engagementFilter === "most-upvoted" && "Most Upvoted"}
+                {engagementFilter === "most-commented" && "Most Commented"}
+                <button
+                  onClick={() => setEngagementFilter("all")}
+                  className="ml-1 hover:text-destructive"
+                >
+                  ×
+                </button>
+              </Badge>
+            )}
           </div>
         )}
       </Card>
@@ -359,7 +292,7 @@ export default function Reports() {
                 return (
                   <TableRow
                     key={report._id}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:bg-slate-50"
                     onClick={() => setSelectedReport(report)}
                   >
                     <TableCell>

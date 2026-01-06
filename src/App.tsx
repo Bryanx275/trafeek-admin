@@ -8,6 +8,7 @@ import Users from "./pages/Users";
 import Reports from "./pages/Reports";
 import AdminLayout from "./components/AdminLayout";
 import RiderPerformance from "./pages/RiderPerformance";
+import RiderReports from "./pages/RiderReports";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rider-reports"
+              element={
+                <ProtectedRoute>
+                  <RiderReports />
                 </ProtectedRoute>
               }
             />
