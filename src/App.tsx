@@ -56,7 +56,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/rider-performance" element={<RiderPerformance />} />
+            <Route
+              path="/rider-performance"
+              element={
+                <ProtectedRoute>
+                  <RiderPerformance />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/reports"
