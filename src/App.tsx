@@ -66,7 +66,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/reports"
               element={
@@ -83,21 +82,20 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          </Routes>
 
-          <Route
-            path="/analytics"
-            element={
-              <ProtectedRoute>
-                <Analytics />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
-  
 }
 
 export default App;
