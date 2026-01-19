@@ -21,8 +21,6 @@ import {
   Users,
   Eye,
   UserPlus,
-  TrendingUp,
-  Clock,
   MousePointerClick,
   Smartphone,
   Monitor,
@@ -47,7 +45,7 @@ export default function Analytics() {
       });
       return res.data;
     },
-    refetchInterval: 60000, // Refresh every minute
+    refetchInterval: 60000,
   });
 
   const { data: realtime } = useQuery({
@@ -56,7 +54,7 @@ export default function Analytics() {
       const res = await api.get("/analytics/realtime");
       return res.data;
     },
-    refetchInterval: 5000, // Refresh every 5 seconds
+    refetchInterval: 5000,
   });
 
   if (isLoading) {
@@ -70,7 +68,6 @@ export default function Analytics() {
   const overview = analytics?.overview || {};
   const charts = analytics?.charts || {};
 
-  // Format device data for pie chart
   const deviceData =
     charts.deviceBreakdown?.map((item: any) => ({
       name: item._id,
