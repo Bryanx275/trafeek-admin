@@ -97,6 +97,7 @@ function App() {
       </BrowserRouter>
     </QueryClientProvider>
   );
+  
 }
 
 export default App;
