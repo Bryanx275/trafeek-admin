@@ -9,6 +9,7 @@ import Reports from "./pages/Reports";
 import AdminLayout from "./components/AdminLayout";
 import RiderPerformance from "./pages/RiderPerformance";
 import RiderReports from "./pages/RiderReports";
+import Analytics from "./pages/Analytics";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +84,15 @@ function App() {
               }
             />
           </Routes>
+
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
+              </ProtectedRoute>
+            }
+          />
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

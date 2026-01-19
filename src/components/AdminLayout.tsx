@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { BarChart3 } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -18,6 +19,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const { admin, logout } = useAuth();
+
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -29,6 +31,7 @@ export default function AdminLayout({
 
   const navItems = [
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/analytics", icon: BarChart3, label: "Analytics" },
     { to: "/users", icon: Users, label: "Users" },
     { to: "/reports", icon: FileText, label: "Reports" },
     { to: "/rider-performance", icon: FileText, label: "Rider Performance" },
