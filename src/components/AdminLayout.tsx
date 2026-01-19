@@ -109,12 +109,12 @@ export default function AdminLayout({
         </div>
       </aside>
 
-      {/* Main Content */}
+      
       <div className="lg:pl-64 pt-16 lg:pt-0">
         <main className="p-6">{children}</main>
       </div>
 
-      {/* Mobile Overlay */}
+      
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
