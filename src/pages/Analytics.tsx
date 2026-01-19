@@ -243,9 +243,9 @@ export default function Analytics() {
         </Card>
       </div>
 
-      {/* Charts Row 2 */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top Pages */}
+        
         <Card className="p-6">
           <h3 className="text-lg font-semibold mb-4">Most Viewed Pages</h3>
           <ResponsiveContainer width="100%" height={300}>
